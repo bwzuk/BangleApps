@@ -109,20 +109,19 @@
         save('lineTwo')(s.lineTwo)
       },
     },
-      'Active Steps Per Hour': {
-        value: s.stepLength,
-        min: 0,
-        max: 500,
-        step: 1,
-        onchange: save('activityPerHour'),
-      },
-      'Activity Prompts': {
-        value: s.stepLength,
-        min: 0,
-        max: 3,
-        step: 1,
-        onchange: save('activityPrompt'),
-      },
+    'Active Steps Per Hour': {
+      value: s.stepLength,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: save('activityPerHour'),
+    },
+    'Activity Prompts': {
+      value: s.stepLength,
+      min: 0,
+      max: 3,
+      step: 1,
+      onchange: save('activityPrompt'),
     },
   };
   E.showMenu(menu);
