@@ -198,12 +198,14 @@
 
   //vibrate, draw move message and start timer for sitting message
   function remind() {
+    /*
     Bangle.buzz(1000,1);
     g.clear();
     g.setFont("8x12",4);
     g.setColor(0x03E0);
     g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
     // setTimeout(print_message,setting("moveTime") * 60000);
+    */
   }
 
   //This event is called just before the device shuts down for commands such as reset(), load(), save(), E.reboot() or Bangle.off()
