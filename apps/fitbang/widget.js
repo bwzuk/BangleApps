@@ -11,6 +11,7 @@
   var stepGoalBarLength = 0; //length og progress bar   
   var lastUpdate = new Date(); //used to reset counted steps on new day
   var width = 46; //width of widget
+  var lastOffset = 0;
 
   //used for statistics and debugging
   var stepsTooShort = 0; 
@@ -73,7 +74,7 @@
       'stepGoal' : 10000,
       'stepLength' : 75,
       'activityPerHour' : 250,
-      'activityPrompt' : 3,
+      'activityPrompt' : 2,
     };
   if (!settings) { loadSettings(); }
   return (key in settings) ? settings[key] : DEFAULTS[key];
@@ -136,6 +137,7 @@
 
     if (active == 1) {
       stepsCounted++; //count steps
+      stepsThisHour++;
     }
     else {
       stepsOutsideTime++;
@@ -198,6 +200,33 @@
 
   //vibrate, draw move message and start timer for sitting message
   function remind() {
+    
+    
+  var d = new Date();
+  var h = d.getHours(), m = d.getMinutes();
+  if(m=0)
+  {
+    lastOffset = 0;
+    stepsThisHour = 0;
+  }
+  else if (stepsThisHour < setting('activityPerHour'))
+  {
+    var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
+    if (lastOffset < offset)
+    {
+      Bangle.buzz(1000,1);
+      g.clear();
+      g.setFont("8x12",4);
+      g.setColor(0x03E0);
+      g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
+      lastOffset=0
+    }
+  }
+ 
+
+  
+
+   // if(now.getTime() )
     /*
     Bangle.buzz(1000,1);
     g.clear();

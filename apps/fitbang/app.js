@@ -22,7 +22,7 @@ const DEFAULTS = {
     'stepGoal' : 10000,
     'stepLength' : 75,
     'activityPerHour' : 250,
-    'activityPrompt' : 3,
+    'activityPrompt' : 2,
 };
 if (!settings) { loadSettings(); }
 return (key in settings) ? settings[key] : DEFAULTS[key];

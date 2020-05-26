@@ -18,7 +18,7 @@
     'lineOne': LINES[0],
     'lineTwo': LINES[1],
     'activityPerHour' : 250,
-    'activityPrompt' : 1,
+    'activityPrompts' : 2,
   };
   // ...and overwrite them with any saved values
   // This way saved values are preserved if a new version adds more settings
@@ -109,15 +109,15 @@
         save('lineTwo')(s.lineTwo)
       },
     },
-    'Active Steps Per Hour': {
-      value: s.stepLength,
+    'Hour Steps': {
+      value: s.activityPerHour,
       min: 0,
       max: 500,
       step: 1,
       onchange: save('activityPerHour'),
     },
     'Activity Prompts': {
-      value: s.stepLength,
+      value: s.activityPrompts,
       min: 0,
       max: 3,
       step: 1,
