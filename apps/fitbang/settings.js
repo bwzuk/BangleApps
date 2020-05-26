@@ -108,6 +108,7 @@
         s.lineTwo = LINES[newIndex]
         save('lineTwo')(s.lineTwo)
       },
+    },
       'Active Steps Per Hour': {
         value: s.stepLength,
         min: 0,
