@@ -1219,6 +1219,21 @@
       {"name":"activepedom.app.js","url":"app.js"}
     ]
   },
+  { "id": "fitbang",
+    "name": "Fit Bang",
+    "shortName":"Fit Bang",
+    "icon": "app.png",
+    "version":"0.01",
+    "description": "Combined Pedometer and Activity Prompt.",
+    "tags": "outdoors,widget",
+     "readme": "README.md",
+    "storage": [
+      {"name":"fitbang.wid.js","url":"widget.js"},
+      {"name":"fitbang.settings.js","url":"settings.js"},
+      {"name":"fitbang.img","url":"app-icon.js","evaluate":true},
+      {"name":"fitbang.app.js","url":"app.js"}
+    ]
+  },
   { "id": "chronowid",
     "name": "Chrono Widget",
     "shortName":"Chrono Widget",
