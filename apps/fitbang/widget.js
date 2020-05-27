@@ -227,6 +227,7 @@
   {
     if(stepsThisHour < setting('activityPerHour'))
     {
+      var height = 23; //width is deined globally
       g.reset();
       g.clearRect(this.x, this.y, this.x+width, this.y+height);
       g.setFont("6x8", 2);
