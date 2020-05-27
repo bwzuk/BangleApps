@@ -112,14 +112,14 @@
       },
     },
     'First Hour': {
-      value: s.activityPerHour,
+      value: s.activityStart,
       min: 0,
       max: 24,
       step: 1,
       onchange: save('activityStart'),
     },
     'Last Hour': {
-      value: s.activityPrompts,
+      value: s.activityEnd,
       min: 0,
       max: 24,
       step: 1,
