@@ -204,7 +204,7 @@
     
   var d = new Date();
   var h = d.getHours(), m = d.getMinutes();
-  if(m=0)
+  if(m==0)
   {
     lastOffset = 0;
     stepsThisHour = 0;
