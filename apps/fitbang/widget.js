@@ -221,17 +221,19 @@
     lastOffset = 0;
     stepsThisHour = 0;
   }
-  else if (stepsThisHour < setting('activityPerHour'))
-  {
+  
     var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
     if (lastOffset < offset)
     {
-      Bangle.buzz(1000,1);
-      g.clear();
-      g.setFont("8x12",4);
-      g.setColor(0x03E0);
-      g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
-      lastOffset=0
+      if(stepsThisHour < setting('activityPerHour'))
+      {
+        Bangle.buzz(1000,1);
+        g.clear();
+        g.setFont("8x12",4);
+        g.setColor(0x03E0);
+        g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
+      }
+      lastOffset=offset
     }
   }
  
@@ -282,7 +284,7 @@
     stepsTooShort = pedomData.stepsTooShort;
     stepsTooLong = pedomData.stepsTooLong;
     stepsOutsideTime = pedomData.stepsOutsideTime;
-    stepsThisHour = pedomData.stepsThisHour;
+    stepsThisHour = 0;//pedomData.stepsThisHour;
   }
   pedomdata = 0; //reset pedomdata to save memory
 
