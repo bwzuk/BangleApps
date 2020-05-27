@@ -227,30 +227,16 @@
   {
     if(stepsThisHour < setting('activityPerHour'))
     {
-      console.log('Triggered:'+offset)
-      //Bangle.buzz(1000,1)
-      g.clear();
-      //g.setFont("8x12",4);
+      g.reset();
+      g.clearRect(this.x, this.y, this.x+width, this.y+height);
+      g.setFont("6x8", 2);
       g.setColor(0x03E0);
-      g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
+      g.drawString('MOVE!',this.x+1,this.y);  //first line, big number, steps
+      Bangle.buzz(1000,1)
     }
     lastOffset=offset;
-  }
-  
- 
-
-  
-
-   // if(now.getTime() )
-    /*
-    Bangle.buzz(1000,1);
-    g.clear();
-    g.setFont("8x12",4);
-    g.setColor(0x03E0);
-    g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
-    // setTimeout(print_message,setting("moveTime") * 60000);
-    */
-  }
+  }  
+}
 
   //This event is called just before the device shuts down for commands such as reset(), load(), save(), E.reboot() or Bangle.off()
   E.on('kill', () => {
