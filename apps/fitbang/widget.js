@@ -247,7 +247,9 @@
       WIDGETS["fitbang"].draw();
       Bangle.buzz(1000,1)
       displayReminder = true;
-      setTimeout("clearReminder()",10000);
+      setInterval(function() {
+        clearReminder();
+      }, 10000); 
     }
     lastOffset=offset;
   }  
