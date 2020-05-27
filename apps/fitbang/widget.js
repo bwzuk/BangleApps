@@ -253,7 +253,7 @@
         WIDGETS["fitbang"].draw();
         Bangle.buzz(1000,1)
         displayReminder = true;
-        setInterval(function() {
+        setTimeout(function() {
           clearReminder();
         }, 10000); 
       }
