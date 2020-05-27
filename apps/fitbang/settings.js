@@ -17,6 +17,8 @@
     'stepLength' : 75,
     'lineOne': LINES[0],
     'lineTwo': LINES[1],
+    'activityStart' : 9,
+    'activityEnd' : 18,
     'activityPerHour' : 250,
     'activityPrompts' : 2,
   };
@@ -109,6 +111,20 @@
         save('lineTwo')(s.lineTwo)
       },
     },
+    'First Hour': {
+      value: s.activityPerHour,
+      min: 0,
+      max: 24,
+      step: 1,
+      onchange: save('activityStart'),
+    },
+    'Last Hour': {
+      value: s.activityPrompts,
+      min: 0,
+      max: 24,
+      step: 1,
+      onchange: save('activityEnd'),
+    },
     'Hour Steps': {
       value: s.activityPerHour,
       min: 0,
@@ -119,7 +135,7 @@
     'Activity Prompts': {
       value: s.activityPrompts,
       min: 0,
-      max: 3,
+      max: 6,
       step: 1,
       onchange: save('activityPrompts'),
     },

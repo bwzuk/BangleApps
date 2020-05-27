@@ -21,8 +21,10 @@ const DEFAULTS = {
     'stepSensitivity' : 80,
     'stepGoal' : 10000,
     'stepLength' : 75,
+    'activityStart' : 9,
+    'activityEnd' : 18,
     'activityPerHour' : 250,
-    'activityPrompt' : 2,
+    'activityPrompts' : 2,
 };
 if (!settings) { loadSettings(); }
 return (key in settings) ? settings[key] : DEFAULTS[key];

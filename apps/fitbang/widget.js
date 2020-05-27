@@ -74,6 +74,8 @@
       'stepSensitivity' : 80,
       'stepGoal' : 10000,
       'stepLength' : 75,
+      'activityStart' : 9,
+      'activityStart' : 18,
       'activityPerHour' : 250,
       'activityPrompt' : 2,
     };
@@ -222,39 +224,43 @@
   }
 
   function clearReminder() {
+    console.log("Clear Reminder")
     displayReminder = false;
   }
 
   //vibrate, draw move message and start timer for sitting message
   function remind() {
     
-    
-  var d = new Date();
-  var h = d.getHours(), m = d.getMinutes();
-  if(m==0)
-  {
-    lastOffset = 0;
-    stepsThisHour = 0;
-  }
-  
-  var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
-  if (lastOffset < offset)
-  {
-    if(stepsThisHour < setting('activityPerHour'))
+    console.log("Remind tick")
+    var d = new Date();
+    var h = d.getHours(), m = d.getMinutes();
+    if(m==0)
     {
-      //var height = 23; //width is deined globally
-      Bangle.setLCDPower(true);
-      WIDGETS["fitbang"].draw();
-      Bangle.buzz(1000,1)
-      displayReminder = true;
-      setInterval(function() {
-        clearReminder();
-      }, 10000); 
+      console.log("New Hour")
+      lastOffset = 0;
+      stepsThisHour = 0;
     }
-    lastOffset=offset;
-  }  
+    
+    var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
+    if (lastOffset < offset)
+    {
+      console.log("New Reminder Period")
+      if(h >= setting('activityStart') && h < setting('activityEnd') && stepsThisHour < setting('activityPerHour'))
+      {
+        console.log("Display Reminder")
+        //var height = 23; //width is deined globally
+        Bangle.setLCDPower(true);
+        WIDGETS["fitbang"].draw();
+        Bangle.buzz(1000,1)
+        displayReminder = true;
+        setInterval(function() {
+          clearReminder();
+        }, 10000); 
+      }
+      lastOffset=offset;
+    }  
 
-}
+  }
 
 
 
