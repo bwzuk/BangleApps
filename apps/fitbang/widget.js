@@ -12,6 +12,7 @@
   var lastUpdate = new Date(); //used to reset counted steps on new day
   var width = 46; //width of widget
   var lastOffset = 0;
+  var displayReminder = false;
 
   //used for statistics and debugging
   var stepsTooShort = 0; 
@@ -164,49 +165,59 @@
     g.reset();
     g.clearRect(this.x, this.y, this.x+width, this.y+height);
     
-    //draw numbers
-    if (active == 1) g.setColor(0x07E0); //green
-    else g.setColor(0xFFFF); //white
-    g.setFont("6x8", 2);
+    if(displayReminder)
+    {
+      g.reset();
+      //g.clearRect(WIDGETS["fitbang"].x, WIDGETS["fitbang"].y, WIDGETS["fitbang"].x+width, WIDGETS["fitbang"].y+height);
+      g.setFont("6x8", 2);
+      g.setColor(0x03E0);
+      g.drawString('MOVE!',this.x+1,this.y);  //first line, big number, steps
+    }
+    else
+    {
+      //draw numbers
+      if (active == 1) g.setColor(0x07E0); //green
+      else g.setColor(0xFFFF); //white
+      g.setFont("6x8", 2);
 
-    if (setting('lineOne') == 'Steps') {
-      g.drawString(kFormatterSteps(stepsCounted),this.x+1,this.y);  //first line, big number, steps
+      if (setting('lineOne') == 'Steps') {
+        g.drawString(kFormatterSteps(stepsCounted),this.x+1,this.y);  //first line, big number, steps
+      }
+      if (setting('lineOne') == 'Distance') {
+        g.drawString(distance.toFixed(2),this.x+1,this.y);  //first line, big number, distance
+      }
+      if (setting('lineOne') == 'Hour') {
+        g.drawString(stepsThisHour,this.x+1,this.y);  //first line, big number, distance
+      }
+      if (setting('lineOne') == 'Prompt') {
+        g.drawString(lastOffset,this.x+1,this.y);  //first line, big number, distance
+      }
+      g.setFont("6x8", 1);
+      g.setColor(0xFFFF); //white
+      if (setting('lineTwo') == 'Steps') {
+        g.drawString(stepsCounted,this.x+1,this.y+14); //second line, small number, steps
+      }
+      if (setting('lineTwo') == 'Distance') {
+        g.drawString(distance.toFixed(3) + "km",this.x+1,this.y+14); //second line, small number, distance
+      }
+      if (setting('lineTwo') == 'Hour') {
+        g.drawString(stepsThisHour ,this.x+1,this.y+14); //second line, small number, distance
+      }
+      if (setting('lineTwo') == 'Prompt') {
+        g.drawString(lastOffset ,this.x+1,this.y+14); //second line, small number, distance
+      }
+      
+      //draw step goal bar
+      stepGoalPercent = (stepsCounted / setting('stepGoal')) * 100;
+      stepGoalBarLength = width / 100 * stepGoalPercent;
+      if (stepGoalBarLength > width) stepGoalBarLength = width; //do not draw across width of widget
+      g.setColor(0x7BEF); //grey
+      g.fillRect(this.x, this.y+height, this.x+width, this.y+height); // draw background bar
+      g.setColor(0xFFFF); //white
+      g.fillRect(this.x, this.y+height, this.x+1, this.y+height-1); //draw start of bar
+      g.fillRect(this.x+width, this.y+height, this.x+width-1, this.y+height-1); //draw end of bar
+      g.fillRect(this.x, this.y+height, this.x+stepGoalBarLength, this.y+height); // draw progress bar
     }
-    if (setting('lineOne') == 'Distance') {
-      g.drawString(distance.toFixed(2),this.x+1,this.y);  //first line, big number, distance
-    }
-    if (setting('lineOne') == 'Hour') {
-      g.drawString(stepsThisHour,this.x+1,this.y);  //first line, big number, distance
-    }
-    if (setting('lineOne') == 'Prompt') {
-      g.drawString(lastOffset,this.x+1,this.y);  //first line, big number, distance
-    }
-    g.setFont("6x8", 1);
-    g.setColor(0xFFFF); //white
-    if (setting('lineTwo') == 'Steps') {
-      g.drawString(stepsCounted,this.x+1,this.y+14); //second line, small number, steps
-    }
-    if (setting('lineTwo') == 'Distance') {
-      g.drawString(distance.toFixed(3) + "km",this.x+1,this.y+14); //second line, small number, distance
-    }
-    if (setting('lineTwo') == 'Hour') {
-      g.drawString(stepsThisHour ,this.x+1,this.y+14); //second line, small number, distance
-    }
-    if (setting('lineTwo') == 'Prompt') {
-      g.drawString(lastOffset ,this.x+1,this.y+14); //second line, small number, distance
-    }
-    
-    //draw step goal bar
-    stepGoalPercent = (stepsCounted / setting('stepGoal')) * 100;
-    stepGoalBarLength = width / 100 * stepGoalPercent;
-    if (stepGoalBarLength > width) stepGoalBarLength = width; //do not draw across width of widget
-    g.setColor(0x7BEF); //grey
-    g.fillRect(this.x, this.y+height, this.x+width, this.y+height); // draw background bar
-    g.setColor(0xFFFF); //white
-    g.fillRect(this.x, this.y+height, this.x+1, this.y+height-1); //draw start of bar
-    g.fillRect(this.x+width, this.y+height, this.x+width-1, this.y+height-1); //draw end of bar
-    g.fillRect(this.x, this.y+height, this.x+stepGoalBarLength, this.y+height); // draw progress bar
-
     settings = 0; //reset settings to save memory
   }
 
@@ -227,16 +238,20 @@
   {
     if(stepsThisHour < setting('activityPerHour'))
     {
-      var height = 23; //width is deined globally
-      g.reset();
-      g.clearRect(this.x, this.y, this.x+width, this.y+height);
-      g.setFont("6x8", 2);
-      g.setColor(0x03E0);
-      g.drawString('MOVE!',this.x+1,this.y);  //first line, big number, steps
+      //var height = 23; //width is deined globally
+      Bangle.setLCDPower(true);
+      WIDGETS["fitbang"].draw();
       Bangle.buzz(1000,1)
+      displayReminder = true;
+      setTimeout("clearReminder()",10000);
     }
     lastOffset=offset;
   }  
+
+}
+
+function clearReminder() {
+  displayReminder = false;
 }
 
   //This event is called just before the device shuts down for commands such as reset(), load(), save(), E.reboot() or Bangle.off()
