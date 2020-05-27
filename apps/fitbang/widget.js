@@ -175,6 +175,12 @@
     if (setting('lineOne') == 'Distance') {
       g.drawString(distance.toFixed(2),this.x+1,this.y);  //first line, big number, distance
     }
+    if (setting('lineOne') == 'Hour') {
+      g.drawString(stepsThisHour,this.x+1,this.y);  //first line, big number, distance
+    }
+    if (setting('lineOne') == 'Prompt') {
+      g.drawString(lastOffset,this.x+1,this.y);  //first line, big number, distance
+    }
     g.setFont("6x8", 1);
     g.setColor(0xFFFF); //white
     if (setting('lineTwo') == 'Steps') {
@@ -182,6 +188,12 @@
     }
     if (setting('lineTwo') == 'Distance') {
       g.drawString(distance.toFixed(3) + "km",this.x+1,this.y+14); //second line, small number, distance
+    }
+    if (setting('lineTwo') == 'Hour') {
+      g.drawString(stepsThisHour ,this.x+1,this.y+14); //second line, small number, distance
+    }
+    if (setting('lineTwo') == 'Prompt') {
+      g.drawString(lastOffset ,this.x+1,this.y+14); //second line, small number, distance
     }
     
     //draw step goal bar

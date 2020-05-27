@@ -4,7 +4,7 @@
  */
 (function(back) {
   const SETTINGS_FILE = 'fitbang.settings.json';
-  const LINES = ['Steps', 'Distance'];
+  const LINES = ['Steps', 'Distance', 'Hour', 'Prompt'];
 
   // initialize with default settings...
   let s = {
@@ -121,7 +121,7 @@
       min: 0,
       max: 3,
       step: 1,
-      onchange: save('activityPrompt'),
+      onchange: save('activityPrompts'),
     },
   };
   E.showMenu(menu);
