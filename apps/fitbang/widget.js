@@ -222,20 +222,20 @@
     stepsThisHour = 0;
   }
   
-    var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
-    if (lastOffset < offset)
+  var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
+  if (lastOffset < offset)
+  {
+    if(stepsThisHour < setting('activityPerHour'))
     {
-      if(stepsThisHour < setting('activityPerHour'))
-      {
-        Bangle.buzz(1000,1);
-        g.clear();
-        g.setFont("8x12",4);
-        g.setColor(0x03E0);
-        g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
-      }
-      lastOffset=offset
+      Bangle.buzz(1000,1);
+      g.clear();
+      g.setFont("8x12",4);
+      g.setColor(0x03E0);
+      g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
     }
+    lastOffset=offset
   }
+  
  
 
   
