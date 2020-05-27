@@ -227,9 +227,10 @@
   {
     if(stepsThisHour < setting('activityPerHour'))
     {
-      Bangle.buzz(1000,1);
+      console.log('Triggered:'+offset)
+      //Bangle.buzz(1000,1)
       g.clear();
-      g.setFont("8x12",4);
+      //g.setFont("8x12",4);
       g.setColor(0x03E0);
       g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
     }
