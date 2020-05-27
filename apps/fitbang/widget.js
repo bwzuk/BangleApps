@@ -233,7 +233,7 @@
       g.setColor(0x03E0);
       g.drawString("MOVE!", g.getWidth()/2, g.getHeight()/2);
     }
-    lastOffset=offset
+    lastOffset=offset;
   }
   
  
