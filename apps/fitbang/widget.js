@@ -221,6 +221,10 @@
     settings = 0; //reset settings to save memory
   }
 
+  function clearReminder() {
+    displayReminder = false;
+  }
+
   //vibrate, draw move message and start timer for sitting message
   function remind() {
     
@@ -250,9 +254,7 @@
 
 }
 
-function clearReminder() {
-  displayReminder = false;
-}
+
 
   //This event is called just before the device shuts down for commands such as reset(), load(), save(), E.reboot() or Bangle.off()
   E.on('kill', () => {
