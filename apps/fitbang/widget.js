@@ -12,7 +12,7 @@
   var lastUpdate = new Date(); //used to reset counted steps on new day
   var width = 46; //width of widget
   var lastOffset = 0;
-  var displayReminder = false;
+  var displayReminder = 0; // Activity reminder state, 0 = off, 1 = move, 2 = target reached
 
   //used for statistics and debugging
   var stepsTooShort = 0; 
@@ -28,6 +28,8 @@
   const PEDOMFILE = "fitbang.steps.json";
   var dataFile;
   var storeDataInterval = 5*60*1000; //ms
+
+  var reminderTimeout = null;
   
   let settings;
     //load settings
@@ -75,7 +77,7 @@
       'stepGoal' : 10000,
       'stepLength' : 75,
       'activityStart' : 9,
-      'activityStart' : 18,
+      'activityEnd' : 18,
       'activityPerHour' : 250,
       'activityPrompt' : 2,
     };
@@ -111,6 +113,8 @@
   }
 
   function calcSteps() {
+
+    var metHourTarget =  stepsThisHour < setting('activityPerHour');
     stopTimeStep = new Date(); //stop time after each step
     stepTimeDiff = stopTimeStep - startTimeStep; //time between steps in milliseconds
     startTimeStep = new Date(); //start time again
@@ -130,6 +134,7 @@
     if (steps >= setting('stepThreshold')) {
       if (active == 0) {
         stepsCounted = stepsCounted + (setting('stepThreshold') -1) ; //count steps needed to reach active status, last step is counted anyway, so treshold -1
+        stepsThisHour = stepsThisHour + (setting('stepThreshold') -1) ; //count steps needed to reach active status, last step is counted anyway, so treshold -1
         stepsOutsideTime = stepsOutsideTime - 10; //substract steps needed to reach active status
       }
       active = 1;
@@ -141,10 +146,31 @@
     if (active == 1) {
       stepsCounted++; //count steps
       stepsThisHour++;
+
+ 
     }
     else {
       stepsOutsideTime++;
     }
+
+    if(!metHourTarget &&  stepsThisHour >= setting('activityPerHour'))
+    {
+      var h = startTimeStep.getHours();
+      if (h >= setting('activityStart') && h < setting('activityEnd'))
+      {
+        if(reminderTimeout)
+        {
+          clearTimeout(reminderTimeout);
+        } 
+
+        Bangle.buzz(1000,1)
+        displayReminder = 2 ;     
+        reminderTimeout = setTimeout(function() {
+          clearReminder();
+        }, 10000); 
+      }
+    }
+
     settings = 0; //reset settings to save memory
   }
 
@@ -167,13 +193,20 @@
     g.reset();
     g.clearRect(this.x, this.y, this.x+width, this.y+height);
     
-    if(displayReminder)
+    if(displayReminder==1)
+    {
+      g.setFont("6x8", 2);
+      g.setColor(0xFD20);
+      g.drawString('MOVE',this.x+1,this.y);  
+      g.setFont("6x8", 1);
+      g.drawString(stepsThisHour ,this.x+1,this.y+14); 
+    }
+    else if(displayReminder==2)
     {
       g.reset();
-      //g.clearRect(WIDGETS["fitbang"].x, WIDGETS["fitbang"].y, WIDGETS["fitbang"].x+width, WIDGETS["fitbang"].y+height);
       g.setFont("6x8", 2);
-      g.setColor(0x03E0);
-      g.drawString('MOVE!',this.x+1,this.y);  //first line, big number, steps
+      g.setColor(0x001F);
+      g.drawString('DONE',this.x+1,this.y);  
     }
     else
     {
@@ -225,7 +258,8 @@
 
   function clearReminder() {
     console.log("Clear Reminder")
-    displayReminder = false;
+    displayReminder = 0;
+    reminderTimeout = null;
   }
 
   //vibrate, draw move message and start timer for sitting message
@@ -234,15 +268,16 @@
     console.log("Remind tick")
     var d = new Date();
     var h = d.getHours(), m = d.getMinutes();
-    if(m==0)
+    var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
+
+    if(m==0 || offset < lastOffset)
     {
       console.log("New Hour")
       lastOffset = 0;
       stepsThisHour = 0;
     }
-    
-    var offset = Math.floor(((setting('activityPrompts') / 60.0) * (m+10)))
-    if (lastOffset < offset)
+  
+    else if (lastOffset < offset)
     {
       console.log("New Reminder Period")
       if(h >= setting('activityStart') && h < setting('activityEnd') && stepsThisHour < setting('activityPerHour'))
@@ -252,8 +287,8 @@
         Bangle.setLCDPower(true);
         WIDGETS["fitbang"].draw();
         Bangle.buzz(1000,1)
-        displayReminder = true;
-        setTimeout(function() {
+        displayReminder = 1;
+        reminderTimeout = setTimeout(function() {
           clearReminder();
         }, 10000); 
       }
@@ -297,7 +332,7 @@
     stepsTooShort = pedomData.stepsTooShort;
     stepsTooLong = pedomData.stepsTooLong;
     stepsOutsideTime = pedomData.stepsOutsideTime;
-    stepsThisHour = 0;//pedomData.stepsThisHour;
+    stepsThisHour = pedomData.stepsThisHour;
   }
   pedomdata = 0; //reset pedomdata to save memory
 
@@ -309,5 +344,5 @@
   
   setInterval(function() {
     remind();
-  }, 60000); // update every 10 minutes
+  }, 60000); // update every 1 minute
 })();
