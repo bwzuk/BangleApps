@@ -114,7 +114,7 @@
 
   function calcSteps() {
 
-    var metHourTarget =  stepsThisHour < setting('activityPerHour');
+    var metHourTarget =  stepsThisHour > setting('activityPerHour');
     stopTimeStep = new Date(); //stop time after each step
     stepTimeDiff = stopTimeStep - startTimeStep; //time between steps in milliseconds
     startTimeStep = new Date(); //start time again
@@ -162,7 +162,7 @@
         {
           clearTimeout(reminderTimeout);
         } 
-
+        metHourTarget = true;
         Bangle.buzz(1000,1)
         displayReminder = 2 ;     
         reminderTimeout = setTimeout(function() {
